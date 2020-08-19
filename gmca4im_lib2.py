@@ -1,6 +1,9 @@
 import numpy as np
 import sys
 import healpy as hp
+import time
+
+import pyMRS as pym
 
 ## speed of light ##
 c = 3.0e8  # m/s
@@ -203,4 +206,71 @@ def noise_map(sigma,nside=512):
 	m = np.random.normal(0.0, sigma, npixels)
 	return m
 
+#########################################################
+###################    GMCA running   ###################
+#########################################################
+
+# J is the number of WT scale
+# spherical or 2D patch?
+def wavelet_transform(X,J=3):
+
+	print('\nWavelet transforming the data . . .')
+	start_w = time.time()
+
+	X_wt = np.zeros((len(X),len(X[0])*J))
+	LMAX  = 3*hp.npix2nside(len(X[0]))
+
+	for r in range(X.shape[0]):
+		temp = pym.wttrans(X[r],nscale=J+1,lmax=LMAX)
+		X_wt[r,:] = temp[:,0:J].reshape(1,-1) # trash the coarse scale
+
+	end_w = time.time()
+	tw = end_w - start_w
+	print('. . completed in %.2f minutes\n'%(tw/60))
+	del tw,end_w,start_w
+
+	return X_wt
+
+
+
+
+
+def run_GMCA(X_wt,AInit,n_s,mints,nmax,L0,ColFixed,whitening,epsi):
+
+	# First guess mixing matrix (could be set to None or not provided at all)
+	if AInit is None:
+		AInit = np.random.rand(len(X_wt),n_s)
+
+	print('\nNow running GMCA . . .')
+
+	if whitening:
+
+		R = X_wt@X_wt.T
+		L,U = np.linalg.eig(R)
+		## whitening the data
+		
+		Q = np.diag(1./(L+epsi*np.max(L)))@U.T
+		iQ = U@np.diag((L+epsi*np.max(L)))
+
+		if ColFixed is None:
+			CL = None
+		else: CL = Q@ColFixed
+
+		start_w = time.time()
+		Results = gmca.GMCA(Q@X_wt,n=n_s,mints=mints,nmax=nmax,L0=L0,Init=0,AInit=AInit,ColFixed=CL)
+		end_w = time.time()
+
+		Ae = iQ@Results["mixmat"]  # estimated mixing matrix
+		Results.update(mixmat = Ae)
+		del Ae
+
+	else:
+		start_w = time.time()
+		Results = gmca.GMCA(X_wt,n=n_s,mints=mints,nmax=nmax,L0=L0,Init=0,AInit=AInit,ColFixed=ColFixed)
+		end_w = time.time()
+
+	tw = end_w - start_w
+	print('. . completed in %.2f minutes\n'%(tw/60))
+
+	return Results
 
