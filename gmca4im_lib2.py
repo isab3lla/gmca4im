@@ -141,6 +141,16 @@ def almrec(tab,nside):
 	return map_out
 
 
+def plot_cl(fmap,verbose=False):
+	LMAX = 3*hp.get_nside(fmap)
+	cl = hp.anafast(fmap, lmax=LMAX)
+	ell = np.arange(len(cl))
+	y = ell * (ell + 1) * cl/2.0/np.pi
+
+	if verbose:
+		print("l (l+1) C_l /(2pi) [mK^2] vs l")
+
+	return ell, y
 
 #########################################################
 ###################   gaussian beam   ###################
