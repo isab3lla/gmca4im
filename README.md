@@ -9,6 +9,14 @@
 This is the code repository for <a href="https://arxiv.org/abs/2006.05996" target_="blanck">Recovery of 21 cm intensity maps with sparse component separation</a>. 
 All main routines are implemented in Python (>=3.5) and we provide two <a href="https://jupyter-notebook.readthedocs.io/en/stable/" target_="blanck">Jupyter notebooks</a> with demonstrations for reproducing the results of the paper.
 
+## Contents
+
+1. [Data](#Data)
+1. [Requirements](#Requirements)
+1. [Notebooks](#Notebooks)
+1. [Credit](#Credit)
+1. [License](#License)
+
 ### Data
 
 [![DOI](https://zenodo.org/badge/DOI/10.5281/zenodo.3991818.svg)](https://doi.org/10.5281/zenodo.3991818)
