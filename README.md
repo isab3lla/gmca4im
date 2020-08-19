@@ -2,7 +2,7 @@
 ---
 
 > Author: [Isabella P. Carucci](http://orcid.org/0000-0001-5287-0065)<br/>
-> Year: 2020 
+> Year: 2020 <br/>
 > Email: [ipcarucci@gmail.com](mailto:ipcarucci@gmail.com)
 
 
@@ -23,6 +23,7 @@ In order to run the notebooks, the following have to be installed:
 * <a href="http://jupyter.org/" target_="blank">Jupyter</a> (recommend >=1.0.0)
 * <a href="https://matplotlib.org/" target_="blank">Matplotlib</a> (recommend >=3.0.3)
 * <a href="http://www.numpy.org/" target_="blank">NumPy</a> (recommend >=1.16.2)
+MISSING ....
 
 ### Notebooks
 
@@ -42,3 +43,7 @@ All credit for original GMCA code goes to [Jérôme Bobin](http://jbobin.cosmost
 If you use any of this material in your research, we kindly ask that you cite ...
 
 And for the simulated dataset ... 
+
+### License:
+
+??
