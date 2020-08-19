@@ -4,6 +4,7 @@ import healpy as hp
 import time
 
 import pyMRS as pym
+import gmca 
 
 ## speed of light ##
 c = 3.0e8  # m/s
@@ -261,16 +262,16 @@ def run_GMCA(X_wt,AInit,n_s,mints,nmax,L0,ColFixed,whitening,epsi):
 		end_w = time.time()
 
 		Ae = iQ@Results["mixmat"]  # estimated mixing matrix
-		Results.update(mixmat = Ae)
-		del Ae
 
 	else:
 		start_w = time.time()
 		Results = gmca.GMCA(X_wt,n=n_s,mints=mints,nmax=nmax,L0=L0,Init=0,AInit=AInit,ColFixed=ColFixed)
 		end_w = time.time()
 
+		Ae = Results["mixmat"]
+
 	tw = end_w - start_w
 	print('. . completed in %.2f minutes\n'%(tw/60))
 
-	return Results
+	return Ae
 
