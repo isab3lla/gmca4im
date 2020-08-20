@@ -1,6 +1,7 @@
 import numpy as np
 import sys
 import healpy as hp
+import scipy.fftpack
 import time
 
 import pyMRS as pym
@@ -41,35 +42,6 @@ def merging_maps(nu_ch_in,nu_ch_out,maps_in,dnu_out):
 		
 	return maps_out
 
-
-
-#########################################################
-##################   SURVEY PARAMETERS  #################
-#########################################################
-
-## for beam and noise calculation
-
-def survey_info(survey_specs):
-
-	if survey_specs == 'MK': # MeerKAT like
-		dish_diam = 13.5  # m
-		T_inst    = 20.0  # K
-		f_sky     = 0.1   # Survey area (sky fraction)
-		t_obs     = 4000. # hrs, observing time
-		Ndishes   = 64.   # number of dishes
-
-	if survey_specs == 'custom': # you choose
-		dish_diam = 13.5  # m
-		T_inst    = 20.0  # K
-		f_sky     = 0.1   # Survey area (sky fraction)
-		t_obs     = 4000. # hrs, observing time
-		Ndishes   = 64.   # number of dishes
-
-	## initialise a dictionary with the instrument specifications
-	specs_dict = {'dish_diam': dish_diam, 'T_inst': T_inst, 
-					'f_sky': f_sky, 't_obs': t_obs, 'Ndishes' : Ndishes}
-
-	return specs_dict
 
 
 #########################################################
@@ -284,4 +256,119 @@ def run_GMCA(X_wt,AInit,n_s,mints,nmax,L0,ColFixed,whitening,epsi):
 	print('. . completed in %.2f minutes\n'%(tw/60))
 
 	return Ae
+
+
+
+
+#########################################################
+#################    radial clustering   ################
+#########################################################
+
+## HOW to use these functions:
+# # # find the lines of sight over which compute the radial P(k)
+# # indexes_los = np.where(mask==1.0)[0]
+
+# ## which lines of sight
+# # indexes_los = np.arange(0,hp.nside2npix(NSIDE),10)
+# indexes_los = np.arange(hp.nside2npix(NSIDE))
+
+# Pk_1D_removeMean = doing_Pk1D(*clustering_nu(CS_original,indexes_los,nu_ch))
+
+
+# plt.plot(Pk_1D[:,0],Pk_1D[:,1])
+
+# plt.xlabel("$k_{\\nu}$ [MHz$^{-1}$]")
+# plt.ylabel("$P$ [mK$^2$ MHz$^2$]")
+
+## field_array should be nu X pixels 
+## equally spaced array
+
+def clustering_nu(field_array,indexes_los,nu_ch,verbose=False):
+	
+	## sanity check
+	print('sanity check: ')
+	print('  ',(len(field_array[:,0])==len(nu_ch)),' ',(len(field_array[0,:])>=len(indexes_los)))
+	print('  ',(len(nu_ch) % 2) == 0)
+
+
+	## cropping the array
+	T_field = field_array[:,indexes_los]
+	del field_array
+
+	## how many LOS are we considering?
+	nlos = len(indexes_los)
+	print(f'using {nlos} LoS')
+	del indexes_los
+
+	## defines cells 
+	dims = len(nu_ch); dnu  = abs(nu_ch[-1]-nu_ch[-2])
+	print(f'each divided into {dims} cells of {dnu} MHz')
+
+	## I print just 10 LoS for checks
+	if verbose:
+		if nlos<11: R = np.arange(nlos)
+		else: R = np.linspace(0,nlos-1,10,endpoint=True,dtype='int') 
+
+	## remove mean from maps
+	print('removing mean from maps . .')
+	mean_T_mapwise = np.mean(T_field,axis=1)
+	T_field_nm =  np.array([T_field[i,:] - mean_T_mapwise[i] for i in range(dims)])
+	del T_field
+	print('defining DeltaT array . .')
+	deltaT = np.array([T_field_nm[:,ipix]  for ipix in range(nlos)])
+	# print('i.e. deltaT --> ',deltaT.shape)
+	del T_field_nm
+
+	if verbose:
+		for i in R:
+			print(f'{np.min(deltaT[i,:])} < deltaT(los={i}) < {np.max(deltaT[i,:])}\n')
+			print(np.where(np.min(deltaT[i,1:])<-1))
+
+	print('\nFFT the overdensity temperature field along LoS')
+	delta_k = scipy.fftpack.fftn(deltaT,overwrite_x=True,axes=1)
+	delta_k *= dnu;  del deltaT
+
+	delta_k_auto  = np.absolute(delta_k)**2  
+
+	print('done!\n')
+	return dims, dnu, delta_k_auto
+
+def doing_Pk1D(dims,dnu,delta_k_auto):
+
+    # compute the values of k of the modes for the 1D P(k)
+    modes   = np.arange(dims,dtype=np.float64);  middle = int(dims/2)
+    indexes = np.where(modes>middle)[0];  modes[indexes] = modes[indexes]-dims
+    k = modes*(2.0*np.pi/(dnu*dims)) # k in MHz-1
+    k = np.absolute(k)               # just take the modulus
+    del indexes, modes
+
+    # define the k-bins
+    k_bins = np.linspace(0,middle,middle+1)*(2.0*np.pi/(dnu*dims))
+
+    # compute the number of modes and the average number-weighted value of k
+    k_modes = np.histogram(k,bins=k_bins)[0]
+    k_bin   = np.histogram(k,bins=k_bins,weights=k)[0]/k_modes
+
+    # take all LoS and compute the average value for each mode
+    delta_k2_stacked = np.mean(delta_k_auto,dtype=np.float64,axis=0)
+
+    # compute the 1D P(k)
+    Pk_mean = np.histogram(k,bins=k_bins,weights=delta_k2_stacked)[0]
+    Pk_mean = Pk_mean/(dnu*dims*k_modes);  del delta_k2_stacked
+
+    Pk_1D = np.transpose([k_bin[1:],Pk_mean[1:]])
+    
+    return Pk_1D
+
+
+## to plot the frequency power spectrum
+## returns knu and P for x and y axis
+def plot_nuPk(fmap,indexes_los,nu_ch,verbose=False):
+
+	Pk_1D = doing_Pk1D(*clustering_nu(fmap,indexes_los,nu_ch))
+
+	if verbose:
+		print("k_nu [MHz^-1] vs P [mK^2 MHz]")
+
+	return Pk_1D[:,0],Pk_1D[:,1]
 
