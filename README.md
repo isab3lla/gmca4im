@@ -30,9 +30,12 @@ In order to run the notebooks, the following have to be installed:
 
 * <a href="https://www.python.org/" target_="blank">Python</a> (require >=3.5)
 * <a href="http://jupyter.org/" target_="blank">Jupyter</a> (recommend >=1.0.0)
-* <a href="https://matplotlib.org/" target_="blank">Matplotlib</a> (recommend >=3.0.3)
-* <a href="http://www.numpy.org/" target_="blank">NumPy</a> (recommend >=1.16.2)
-MISSING ....
+* <a href="https://matplotlib.org/" target_="blank">Matplotlib</a> (recommend >=3.1.1)
+* <a href="http://www.numpy.org/" target_="blank">NumPy</a> (recommend >=1.16.4)
+* <a href="https://www.scipy.org/" target_="blank">SciPy</a> (recommend >=1.3.0)
+* <a href="https://github.com/healpy/" target_="blank">healpy</a> (recommend >=1.12.9)
+* <a href="https://www.h5py.org/" target_="blank">h5py</a> (recommend >=2.10.0)
+
 
 ### Notebooks
 
@@ -53,6 +56,6 @@ If you use any of this material in your research, we kindly ask that you cite ..
 
 And for the simulated dataset ... 
 
-### License:
+### License
 
 ??
