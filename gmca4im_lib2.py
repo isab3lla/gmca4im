@@ -272,14 +272,6 @@ def run_GMCA(X_wt,AInit,n_s,mints,nmax,L0,ColFixed,whitening,epsi):
 # # indexes_los = np.arange(0,hp.nside2npix(NSIDE),10)
 # indexes_los = np.arange(hp.nside2npix(NSIDE))
 
-# Pk_1D_removeMean = doing_Pk1D(*clustering_nu(CS_original,indexes_los,nu_ch))
-
-
-# plt.plot(Pk_1D[:,0],Pk_1D[:,1])
-
-# plt.xlabel("$k_{\\nu}$ [MHz$^{-1}$]")
-# plt.ylabel("$P$ [mK$^2$ MHz$^2$]")
-
 ## field_array should be nu X pixels 
 ## equally spaced array
 
