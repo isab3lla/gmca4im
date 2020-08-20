@@ -286,9 +286,10 @@ def run_GMCA(X_wt,AInit,n_s,mints,nmax,L0,ColFixed,whitening,epsi):
 def clustering_nu(field_array,indexes_los,nu_ch,verbose=False):
 	
 	## sanity check
-	print('sanity check: ')
-	print('  ',(len(field_array[:,0])==len(nu_ch)),' ',(len(field_array[0,:])>=len(indexes_los)))
-	print('  ',(len(nu_ch) % 2) == 0)
+	if verbose:
+		print('sanity check: ')
+		print('  ',(len(field_array[:,0])==len(nu_ch)),' ',(len(field_array[0,:])>=len(indexes_los)))
+		print('  ',(len(nu_ch) % 2) == 0)
 
 
 	## cropping the array
@@ -297,40 +298,30 @@ def clustering_nu(field_array,indexes_los,nu_ch,verbose=False):
 
 	## how many LOS are we considering?
 	nlos = len(indexes_los)
-	print(f'using {nlos} LoS')
+	if verbose: print(f'using {nlos} LoS')
 	del indexes_los
 
 	## defines cells 
 	dims = len(nu_ch); dnu  = abs(nu_ch[-1]-nu_ch[-2])
-	print(f'each divided into {dims} cells of {dnu} MHz')
-
-	## I print just 10 LoS for checks
-	if verbose:
-		if nlos<11: R = np.arange(nlos)
-		else: R = np.linspace(0,nlos-1,10,endpoint=True,dtype='int') 
+	if verbose: print(f'each divided into {dims} cells of {dnu} MHz')
 
 	## remove mean from maps
-	print('removing mean from maps . .')
+	if verbose: print('removing mean from maps . .')
 	mean_T_mapwise = np.mean(T_field,axis=1)
 	T_field_nm =  np.array([T_field[i,:] - mean_T_mapwise[i] for i in range(dims)])
 	del T_field
-	print('defining DeltaT array . .')
+	if verbose: print('defining DeltaT array . .')
 	deltaT = np.array([T_field_nm[:,ipix]  for ipix in range(nlos)])
 	# print('i.e. deltaT --> ',deltaT.shape)
 	del T_field_nm
 
-	if verbose:
-		for i in R:
-			print(f'{np.min(deltaT[i,:])} < deltaT(los={i}) < {np.max(deltaT[i,:])}\n')
-			print(np.where(np.min(deltaT[i,1:])<-1))
-
-	print('\nFFT the overdensity temperature field along LoS')
+	if verbose: print('\nFFT the overdensity temperature field along LoS')
 	delta_k = scipy.fftpack.fftn(deltaT,overwrite_x=True,axes=1)
 	delta_k *= dnu;  del deltaT
 
 	delta_k_auto  = np.absolute(delta_k)**2  
 
-	print('done!\n')
+	if verbose: print('done!\n')
 	return dims, dnu, delta_k_auto
 
 def doing_Pk1D(dims,dnu,delta_k_auto):
