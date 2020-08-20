@@ -42,7 +42,7 @@ The objective of this notebook is to provide a first glimpse at the simulation a
 
 2. [Perform the BSS](./tut_2_perform_GMCA.ipynb)
 
-In this notebook we perform the Blind Source Separation of the maps, making using of the wavelet-transformed dataset and the GMCA algorithm. We check results by plotting the maps and their power spectra.
+In this notebook we perform the Blind Source Separation of the maps, making using of the wavelet-transformed dataset and the [GMCA](http://md.cosmostat.org/Generalized_MCA.html) algorithm, Generalised Morphological Component Analysis [(Bobin et al. 2007)](http://dx.doi.org/10.1109/TIP.2007.906256). We check results by plotting the maps and their power spectra.
 
 
 ### Credit
