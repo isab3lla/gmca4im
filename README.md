@@ -1,12 +1,12 @@
 # Recovery of 21 cm intensity maps with sparse component separation
----
 
-> Author: [Isabella P. Carucci](http://orcid.org/0000-0001-5287-0065)<br/>
+> Author: [Isabella P. Carucci](http://orcid.org/0000-0001-5287-0065)<br/> 
 > Year: 2020 <br/>
 > Email: [ipcarucci@gmail.com](mailto:ipcarucci@gmail.com)
-
 ---
-[![arXiv](https://img.shields.io/badge/arXiv-2006.05996%20-green.svg)](https://arxiv.org/abs/2006.05996)
+
+[![arXiv](https://img.shields.io/badge/arXiv-2006.05996-b31b1b.svg)](https://arxiv.org/abs/2006.05996)
+
 
 This is the code repository for <a href="https://arxiv.org/abs/2006.05996" target_="blanck">Recovery of 21 cm intensity maps with sparse component separation</a>. 
 All main routines are implemented in Python (>=3.5) and we provide two <a href="https://jupyter-notebook.readthedocs.io/en/stable/" target_="blanck">Jupyter notebooks</a> with demonstrations for reproducing the results presented in the paper.
