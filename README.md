@@ -1,6 +1,6 @@
 # Recovery of 21 cm intensity maps with sparse component separation
 
-> Author: [Isabella P. Carucci](http://orcid.org/0000-0001-5287-0065)<br/> 
+> Author: [Isabella P. Carucci](http://orcid.org/0000-0001-5287-0065) <a itemprop="sameAs" content="https://orcid.org/0000-0001-5287-0065" href="https://orcid.org/0000-0001-5287-0065" target="orcid.widget" rel="noopener noreferrer" style="vertical-align:top;"><img src="https://orcid.org/sites/default/files/images/orcid_16x16.png" style="width:1em;margin-right:.5em;" alt="ORCID iD icon"></a> <br/> 
 > Year: 2020 <br/>
 > Email: [ipcarucci@gmail.com](mailto:ipcarucci@gmail.com)
 ---
