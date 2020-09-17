@@ -2,7 +2,7 @@
 """
 Created on Tue Sep  6 09:40:14 2016
 
-@author: jbobin
+@author: jbobin 
 """
 
 ## Multi-Resolution on the Sphere: MRS
@@ -85,6 +85,7 @@ def alm2tab(alm,lmax):
         tab[l,m,1] = np.imag(alm[r])
 
     return tab
+    
 #
 #  TAB2ALM : FROM TAB TO ALM
 #

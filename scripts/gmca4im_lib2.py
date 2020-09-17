@@ -1,3 +1,10 @@
+
+#######################
+# ipcarucci@gmail.com #
+# 08/2020 #############
+# for online material #
+#######################
+
 import numpy as np
 import sys
 import healpy as hp
