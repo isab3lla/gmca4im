@@ -43,11 +43,11 @@ In order to run the notebooks, the following have to be installed:
 
 1. [Prepare the dataset](./notebooks/tut_1_preparation.ipynb)
 
-The objective of this notebook is to provide a first glimpse at the simulation and prepare the dataset for the foreground-removal exercise. After having loaded the simulation, we add white instrumental noise for each channel. We smooth all maps with a frequency-dependent Gaussian beam. We re-smoothed back to the larger beam so all maps share a common resolution.
+The objective of this notebook is to provide a first glimpse of the simulation and prepare the data-set for the foreground-removal exercise. After having loaded the simulation, we add white instrumental noise for each channel. We smooth all maps with a frequency-dependent Gaussian beam. We re-smoothed back to the larger beam so all maps share a common resolution.
 
 2. [Perform the BSS](./notebooks/tut_2_perform_GMCA.ipynb)
 
-In this notebook we perform the Blind Source Separation of the maps, making using of the wavelet-transformed dataset and the [GMCA](http://md.cosmostat.org/Generalized_MCA.html) algorithm, Generalised Morphological Component Analysis [(Bobin et al. 2007)](http://dx.doi.org/10.1109/TIP.2007.906256). We check results by plotting the maps and their power spectra.
+In this notebook we perform the Blind Source Separation of the maps. We first project the data in wavelet-space and than we apply the [GMCA](http://md.cosmostat.org/Generalized_MCA.html) algorithm, Generalised Morphological Component Analysis [(Bobin et al. 2007)](http://dx.doi.org/10.1109/TIP.2007.906256). We check results by plotting the maps and their power spectra.
 
 
 ### Credit
