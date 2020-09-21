@@ -54,10 +54,13 @@ In this notebook we perform the Blind Source Separation of the maps, making usin
 
 All credit for original GMCA code goes to [Jérôme Bobin](http://jerome-bobin.fr/).
 
-If you use any of this material in your research, we kindly ask that you cite ...
+If you use any of this material in your research, we kindly ask that you cite the <a href="http://dx.doi.org/10.1093/mnras/staa2854" target_="blanck">main paper</a>. 
+
+Regarding bugs, suggestions, questions or feedbacks, feel free to contact the author ([ipcarucci@gmail.com](mailto:ipcarucci@gmail.com)).
 
 
 ### License
 
-GNU General Public License v3.0.
+GNU General Public License v3.0, read the [LICENSE](LICENSE) for more information.
+
 
